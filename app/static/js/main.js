@@ -12,10 +12,9 @@ function generateSeed() {
     let root = bitcoin.bip32.fromSeed(seed);
     let path = "m/44'/0'/0'/0/0";
     let keyPair = root.derivePath(path);
-    let { address } = bitcoin.payments.p2sh({
-        redeem: bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey }),
-        network: bitcoin.networks.bitcoin,
-    });
+    //    let { address } = bitcoin.payments.p2sh({
+    let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
+
 
     document.getElementById('address').value = address;
 
@@ -71,19 +70,19 @@ function copyToClipboard(id) {
             alert('Failed to copy text');
         }
     } else {
-        navigator.clipboard.writeText(copyText.value).then(function() {
+        navigator.clipboard.writeText(copyText.value).then(function () {
             alert('Copied to clipboard');
-        }, function(err) {
+        }, function (err) {
             alert('Failed to copy text: ', err);
         });
     }
 }
 
-document.getElementById('copy-mnemonic').addEventListener('click', function() {
+document.getElementById('copy-mnemonic').addEventListener('click', function () {
     copyToClipboard('mnemonic');
 });
 
-document.getElementById('copy-address').addEventListener('click', function() {
+document.getElementById('copy-address').addEventListener('click', function () {
     copyToClipboard('address');
 });
 
@@ -101,10 +100,7 @@ document.getElementById('decrypt').addEventListener('click', () => {
     let root = bitcoin.bip32.fromSeed(seed);
     let path = "m/44'/0'/0'/0/0";
     let keyPair = root.derivePath(path);
-    let { address } = bitcoin.payments.p2sh({
-        redeem: bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey }),
-        network: bitcoin.networks.bitcoin,
-    });
+    let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
 
     document.getElementById('address').value = address;
 
