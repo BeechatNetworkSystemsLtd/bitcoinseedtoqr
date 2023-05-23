@@ -1,0 +1,14 @@
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.canvas-container {
+    width: 100%;
+    display: none;  /* Hide canvas containers initially */
+}
+
+canvas {
+    max-width: 100%;
+    height: auto !important;
+}

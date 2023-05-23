@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Seed to QR</h1>
+    <div id="explanation" class="px-3">
+        <p>
+            The mnemonic seed for the Bitcoin wallet is generated entirely on your device and not on any server.
+            This means your seed never leaves your computer, ensuring your wallet's safety and security.
+            The QR codes generated are also entirely client-side, which further enhances your security.
+            Your privacy and security are of utmost importance to us, and we have designed this tool with those
+            principles in mind.
+        </p>
+    </div>
+    <form method="POST" class="px-3">
+        <div class="form-group row">
+            <label for="mnemonic" class="col-sm-3">Mnemonic:</label>
+            <div class="col-sm-9">
+                <input type="text" id="mnemonic" class="form-control" readonly> 
+                <button type="button" id="copy-mnemonic" class="btn btn-secondary">Copy Mnemonic</button>
+
+
+
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="mnemonic-qr" class="col-sm-3">Mnemonic QR Code:</label>
+            <div class="col-sm-9">
+                <div class="canvas-container">
+                    <canvas id="mnemonic-qr"></canvas>
+                </div>
+        
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="address" class="col-sm-3">Address:</label>
+            <div class="col-sm-9">
+                <input type="text" id="address" class="form-control" readonly>
+                <button type="button" id="copy-address" class="btn btn-secondary">Copy Address</button>
+
+
+
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="address-qr" class="col-sm-3">Address QR Code:</label>
+            <div class="col-sm-9">
+                <div class="canvas-container">
+                    <canvas id="address-qr"></canvas>
+                </div>
+                
+
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="password" class="col-sm-3">Password:</label>
+            <div class="col-sm-9">
+                <input type="password" id="password" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="encrypted-qr" class="col-sm-3">Encrypted QR Code:</label>
+            <div class="col-sm-9">
+                <div class="canvas-container">
+                    <canvas id="encrypted-qr"></canvas>
+
+                </div>
+                
+            </div>
+        </div>
+
+        <input type="hidden" id="ciphertext">
+        <input type="hidden" id="scanned-ciphertext">
+
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <button type="button" id="generate" class="btn btn-primary">Generate Encrypted QR Code</button>
+                <button type="button" id="decrypt" class="btn btn-primary">Decrypt QR Code</button>
+                <button type="button" id="start-scanner" class="btn btn-primary">Start QR Scanner</button>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <div id="scanner"></div>
+                <p id="scan-result"></p>
+            </div>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
