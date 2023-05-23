@@ -86,6 +86,22 @@ document.getElementById('copy-address').addEventListener('click', function () {
     copyToClipboard('address');
 });
 
+document.getElementById('update-balance').addEventListener('click', function () {
+    let address = document.getElementById('address').value;
+    fetch(`https://blockchain.info/rawaddr/${address}`)
+        .then(response => response.json())
+        .then(data => {
+            // Convert Satoshi to BTC
+            let balance = data.final_balance / 100000000;
+            document.getElementById('balance').value = balance + ' BTC';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to update balance');
+        });
+});
+//...
+
 
 
 document.getElementById('decrypt').addEventListener('click', () => {
