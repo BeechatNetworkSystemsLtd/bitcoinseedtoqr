@@ -28,9 +28,6 @@
             <div class="col-sm-9">
                 <input type="text" id="mnemonic" class="form-control" readonly> 
                 <button type="button" id="copy-mnemonic" class="btn btn-secondary">Copy Mnemonic</button>
-
-
-
             </div>
         </div>
 
@@ -40,7 +37,6 @@
                 <div class="canvas-container">
                     <canvas id="mnemonic-qr"></canvas>
                 </div>
-        
             </div>
         </div>
 
@@ -60,56 +56,65 @@
             </div>
         </div>
 
-
         <div class="form-group row">
             <label for="address-qr" class="col-sm-3">Address QR Code:</label>
             <div class="col-sm-9">
                 <div class="canvas-container">
                     <canvas id="address-qr"></canvas>
                 </div>
-                
-
             </div>
         </div>
 
-        
-
+        <!-- Add elements for the other addresses and their QR codes -->
         <div class="form-group row">
-            <label for="password" class="col-sm-3">Password:</label>
+            <label for="address0" class="col-sm-3">Address 0:</label>
             <div class="col-sm-9">
-                <input type="password" id="password" class="form-control">
+                <input type="text" id="address0" class="form-control" readonly>
             </div>
         </div>
 
         <div class="form-group row">
-            <label for="encrypted-qr" class="col-sm-3">Encrypted QR Code:</label>
+            <label for="address0-qr" class="col-sm-3">Address 0 QR Code:</label>
             <div class="col-sm-9">
                 <div class="canvas-container">
-                    <canvas id="encrypted-qr"></canvas>
-
+                    <canvas id="address0-qr"></canvas>
                 </div>
-                
-            </div>
-        </div>
-
-        <input type="hidden" id="ciphertext">
-        <input type="hidden" id="scanned-ciphertext">
-
-        <div class="form-group row">
-            <div class="col-sm-12">
-                <button type="button" id="generate" class="btn btn-primary">Generate Encrypted QR Code</button>
-                <button type="button" id="decrypt" class="btn btn-primary">Decrypt QR Code</button>
-                <button type="button" id="start-scanner" class="btn btn-primary">Start QR Scanner</button>
             </div>
         </div>
 
         <div class="form-group row">
-            <div class="col-sm-12">
-                <div id="scanner"></div>
-                <p id="scan-result"></p>
+            <label for="address1" class="col-sm-3">Address 1:</label>
+            <div class="col-sm-9">
+                <input type="text" id="address1" class="form-control" readonly>
             </div>
         </div>
 
+        <div class="form-group row">
+            <label for="address1-qr" class="col-sm-3">Address 1 QR Code:</label>
+            <div class="col-sm-9">
+                <div class="canvas-container">
+                    <canvas id="address1-qr"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="address2" class="col-sm-3">Address 2:</label>
+            <div class="col-sm-9">
+                <input type="text" id="address2" class="form-control" readonly>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="address2-qr" class="col-sm-3">Address 2 QR Code:</label>
+            <div class="col-sm-9">
+                <div class="canvas-container">
+                    <canvas id="address2-qr"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" id="generate" class="btn btn-primary">Generate</button>
     </form>
 </div>
 {% endblock %}
