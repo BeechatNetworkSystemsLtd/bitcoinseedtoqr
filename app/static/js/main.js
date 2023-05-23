@@ -3,6 +3,12 @@ const CryptoJS = require('crypto-js');
 const bip39 = require('bip39');
 const bitcoin = require('bitcoinjs-lib');
 const QRCode = require('qrcode');
+const paths = [
+    "m/44'/0'/0'/0/0",
+    "m/49'/0'/0'/0/0",
+    "m/84'/0'/0'/0/0"
+];
+
 
 function generateSeed() {
     let mnemonic = bip39.generateMnemonic(128);
@@ -29,6 +35,20 @@ function generateSeed() {
         if (error) console.error(error);
         console.log('Address QR code successfully generated!');
         document.getElementById('address-qr').parentNode.style.display = "block";  // Show the canvas container
+    });
+
+    paths.forEach((path, i) => {
+        let keyPair = root.derivePath(path);
+        let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
+
+        document.getElementById(`address${i}`).value = address;
+
+        // Generate the address QR code
+        QRCode.toCanvas(document.getElementById(`address${i}-qr`), address, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
+            if (error) console.error(error);
+            console.log(`Address${i} QR code successfully generated!`);
+            document.getElementById(`address${i}-qr`).parentNode.style.display = "block";  // Show the canvas container
+        });
     });
 
     return mnemonic;
@@ -128,6 +148,19 @@ document.getElementById('decrypt').addEventListener('click', () => {
     QRCode.toCanvas(document.getElementById('address-qr'), address, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
         if (error) console.error(error);
         console.log('Address QR code successfully regenerated!');
+    });
+
+    paths.forEach((path, i) => {
+        let keyPair = root.derivePath(path);
+        let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
+
+        document.getElementById(`address${i}`).value = address;
+
+        // Generate the address QR code
+        QRCode.toCanvas(document.getElementById(`address${i}-qr`), originalText, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
+            if (error) console.error(error);
+            console.log(`Address${i} QR code successfully regenerated!`);
+        });
     });
 });
 
