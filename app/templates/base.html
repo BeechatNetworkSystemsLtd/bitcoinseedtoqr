@@ -7,8 +7,10 @@
     <title>Bitcoin Seed to QR</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-loading-bar.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/css/center-atom.css">
+    
 
 
 
@@ -16,12 +18,12 @@
 </head>
 
 <body>
-    <div class="center-atom">
 
-        <div id="myLoader" style="display:none;">Loading...</div>
-    </div>
+
+    
 
     <div class="container">
+        <div id="myLoader" style="display:none;">Loading...</div>
         {% block content %}{% endblock %}
     </div>
     <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
