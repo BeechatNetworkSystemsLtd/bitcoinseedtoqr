@@ -133,6 +133,39 @@ document.getElementById('decrypt').addEventListener('click', () => {
 });
 
 
+document.getElementById('update-all').addEventListener('click', function () {
+    // Get the current mnemonic from the input field
+    let mnemonic = document.getElementById('mnemonic').value;
+
+    // Create seed, generate keypair, and update address and QR codes
+    let seed = bip39.mnemonicToSeedSync(mnemonic);
+    let root = bitcoin.bip32.fromSeed(seed);
+    let path = "m/44'/0'/0'/0/0";
+    let keyPair = root.derivePath(path);
+    let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
+    document.getElementById('address').value = address;
+
+    // Generate the mnemonic and address QR codes
+    QRCode.toCanvas(document.getElementById('mnemonic-qr'), mnemonic, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
+        if (error) console.error(error);
+        console.log('Mnemonic QR code successfully generated!');
+    });
+    QRCode.toCanvas(document.getElementById('address-qr'), address, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
+        if (error) console.error(error);
+        console.log('Address QR code successfully generated!');
+    });
+
+    // Update balance
+    fetch(`https://blockchain.info/rawaddr/${address}`)
+        .then(response => response.json())
+        .then(data => {
+            let balance = data.final_balance / 100000000;
+            document.getElementById('balance').value = balance + ' BTC';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
 
 
 let scanner = new Html5QrcodeScanner("scanner", { fps: 10, qrbox: 250 });
