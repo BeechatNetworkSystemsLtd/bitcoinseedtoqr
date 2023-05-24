@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
 
-    document.getElementById('update-all').addEventListener('click', updateAllData);
+    document.getElementById('update-all-data').addEventListener('click', updateAllData);
 
 
 
