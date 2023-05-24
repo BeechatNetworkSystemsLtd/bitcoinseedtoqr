@@ -18,37 +18,19 @@ function generateSeed() {
     let root = bitcoin.bip32.fromSeed(seed);
     let path = "m/44'/0'/0'/0/0";
     let keyPair = root.derivePath(path);
-    //    let { address } = bitcoin.payments.p2sh({
     let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
-
 
     document.getElementById('address').value = address;
 
-
-    // Generate the mnemonic and address QR codes
     QRCode.toCanvas(document.getElementById('mnemonic-qr'), mnemonic, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
         if (error) console.error(error);
         console.log('Mnemonic QR code successfully generated!');
-        document.getElementById('mnemonic-qr').parentNode.style.display = "block";  // Show the canvas container
+        document.getElementById('mnemonic-qr').parentNode.style.display = "block"; 
     });
     QRCode.toCanvas(document.getElementById('address-qr'), address, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
         if (error) console.error(error);
         console.log('Address QR code successfully generated!');
-        document.getElementById('address-qr').parentNode.style.display = "block";  // Show the canvas container
-    });
-
-    paths.forEach((path, i) => {
-        let keyPair = root.derivePath(path);
-        let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
-
-        document.getElementById(`address${i}`).value = address;
-
-        // Generate the address QR code
-        QRCode.toCanvas(document.getElementById(`address${i}-qr`), address, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
-            if (error) console.error(error);
-            console.log(`Address${i} QR code successfully generated!`);
-            document.getElementById(`address${i}-qr`).parentNode.style.display = "block";  // Show the canvas container
-        });
+        document.getElementById('address-qr').parentNode.style.display = "block"; 
     });
 
     return mnemonic;
@@ -125,7 +107,7 @@ document.getElementById('update-balance').addEventListener('click', function () 
 
 
 document.getElementById('decrypt').addEventListener('click', () => {
-    let ciphertext = document.getElementById('scanned-ciphertext').value;  // Get scanned ciphertext
+    let ciphertext = document.getElementById('scanned-ciphertext').value; 
     let password = document.getElementById('password').value;
     let bytes = CryptoJS.AES.decrypt(ciphertext, password);
     let originalText = bytes.toString(CryptoJS.enc.Utf8);
@@ -140,7 +122,6 @@ document.getElementById('decrypt').addEventListener('click', () => {
 
     document.getElementById('address').value = address;
 
-    // Generate the mnemonic and address QR codes
     QRCode.toCanvas(document.getElementById('mnemonic-qr'), originalText, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
         if (error) console.error(error);
         console.log('Mnemonic QR code successfully regenerated!');
@@ -148,19 +129,6 @@ document.getElementById('decrypt').addEventListener('click', () => {
     QRCode.toCanvas(document.getElementById('address-qr'), address, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
         if (error) console.error(error);
         console.log('Address QR code successfully regenerated!');
-    });
-
-    paths.forEach((path, i) => {
-        let keyPair = root.derivePath(path);
-        let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
-
-        document.getElementById(`address${i}`).value = address;
-
-        // Generate the address QR code
-        QRCode.toCanvas(document.getElementById(`address${i}-qr`), originalText, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
-            if (error) console.error(error);
-            console.log(`Address${i} QR code successfully regenerated!`);
-        });
     });
 });
 
