@@ -10,6 +10,7 @@ const paths = [
 ];
 
 
+
 function generateSeed() {
     let mnemonic = bip39.generateMnemonic(128);
     document.getElementById('mnemonic').value = mnemonic;
@@ -32,13 +33,15 @@ function generateSeed() {
         console.log('Address QR code successfully generated!');
         document.getElementById('address-qr').parentNode.style.display = "block"; 
     });
-
-    return mnemonic;
 }
 
 
+document.getElementById('generate-seed').addEventListener('click', generateSeed);
+
+
+
 document.getElementById('generate').addEventListener('click', () => {
-    let mnemonic = generateSeed();
+    let mnemonic = document.getElementById('mnemonic').value;
     let password = document.getElementById('password').value;
     let ciphertext = CryptoJS.AES.encrypt(mnemonic, password).toString();
 
@@ -58,6 +61,7 @@ document.getElementById('generate').addEventListener('click', () => {
         console.error('No ciphertext was generated!');
     }
 });
+
 
 function copyToClipboard(id) {
     let copyText = document.getElementById(id);
@@ -134,38 +138,10 @@ document.getElementById('decrypt').addEventListener('click', () => {
 
 
 document.getElementById('update-all').addEventListener('click', function () {
-    // Get the current mnemonic from the input field
-    let mnemonic = document.getElementById('mnemonic').value;
-
-    // Create seed, generate keypair, and update address and QR codes
-    let seed = bip39.mnemonicToSeedSync(mnemonic);
-    let root = bitcoin.bip32.fromSeed(seed);
-    let path = "m/44'/0'/0'/0/0";
-    let keyPair = root.derivePath(path);
-    let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
-    document.getElementById('address').value = address;
-
-    // Generate the mnemonic and address QR codes
-    QRCode.toCanvas(document.getElementById('mnemonic-qr'), mnemonic, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
-        if (error) console.error(error);
-        console.log('Mnemonic QR code successfully generated!');
-    });
-    QRCode.toCanvas(document.getElementById('address-qr'), address, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
-        if (error) console.error(error);
-        console.log('Address QR code successfully generated!');
-    });
-
-    // Update balance
-    fetch(`https://blockchain.info/rawaddr/${address}`)
-        .then(response => response.json())
-        .then(data => {
-            let balance = data.final_balance / 100000000;
-            document.getElementById('balance').value = balance + ' BTC';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    generateSeed();
+    updateAllData();
 });
+
 
 
 let scanner = new Html5QrcodeScanner("scanner", { fps: 10, qrbox: 250 });
