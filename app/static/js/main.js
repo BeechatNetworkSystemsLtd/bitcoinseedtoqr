@@ -25,12 +25,12 @@ function generateSeed() {
     QRCode.toCanvas(document.getElementById('mnemonic-qr'), mnemonic, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
         if (error) console.error(error);
         console.log('Mnemonic QR code successfully generated!');
-        document.getElementById('mnemonic-qr').parentNode.style.display = "block"; 
+        document.getElementById('mnemonic-qr').parentNode.style.display = "block";
     });
     QRCode.toCanvas(document.getElementById('address-qr'), address, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
         if (error) console.error(error);
         console.log('Address QR code successfully generated!');
-        document.getElementById('address-qr').parentNode.style.display = "block"; 
+        document.getElementById('address-qr').parentNode.style.display = "block";
     });
 }
 
@@ -57,12 +57,12 @@ function updateAllData() {
     QRCode.toCanvas(document.getElementById('mnemonic-qr'), mnemonic, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
         if (error) console.error(error);
         console.log('Mnemonic QR code successfully generated!');
-        document.getElementById('mnemonic-qr').parentNode.style.display = "block"; 
+        document.getElementById('mnemonic-qr').parentNode.style.display = "block";
     });
     QRCode.toCanvas(document.getElementById('address-qr'), address, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
         if (error) console.error(error);
         console.log('Address QR code successfully generated!');
-        document.getElementById('address-qr').parentNode.style.display = "block"; 
+        document.getElementById('address-qr').parentNode.style.display = "block";
     });
 }
 
@@ -147,7 +147,7 @@ document.getElementById('update-balance').addEventListener('click', function () 
 
 
 document.getElementById('decrypt').addEventListener('click', () => {
-    let ciphertext = document.getElementById('scanned-ciphertext').value; 
+    let ciphertext = document.getElementById('scanned-ciphertext').value;
     let password = document.getElementById('password').value;
 
     if (ciphertext === "" || password === "") {
