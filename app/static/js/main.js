@@ -3,16 +3,15 @@ const CryptoJS = require('crypto-js');
 const bip39 = require('bip39');
 const bitcoin = require('bitcoinjs-lib');
 const QRCode = require('qrcode');
-const paths = [
-    "m/44'/0'/0'/0/0",
-    "m/49'/0'/0'/0/0",
-    "m/84'/0'/0'/0/0"
-];
 
 
 
 function generateSeed() {
     let mnemonic = bip39.generateMnemonic(128);
+    if (mnemonic === "") {
+        alert("Mnemonic cannot be empty!");
+        return;
+    }
     document.getElementById('mnemonic').value = mnemonic;
 
     let seed = bip39.mnemonicToSeedSync(mnemonic);
@@ -40,9 +39,46 @@ document.getElementById('generate-seed').addEventListener('click', generateSeed)
 
 
 
+function updateAllData() {
+    let mnemonic = document.getElementById('mnemonic').value;
+    if (mnemonic === "") {
+        alert("Mnemonic cannot be empty!");
+        return;
+    }
+
+    let seed = bip39.mnemonicToSeedSync(mnemonic);
+    let root = bitcoin.bip32.fromSeed(seed);
+    let path = "m/44'/0'/0'/0/0";
+    let keyPair = root.derivePath(path);
+    let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
+
+    document.getElementById('address').value = address;
+
+    QRCode.toCanvas(document.getElementById('mnemonic-qr'), mnemonic, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
+        if (error) console.error(error);
+        console.log('Mnemonic QR code successfully generated!');
+        document.getElementById('mnemonic-qr').parentNode.style.display = "block"; 
+    });
+    QRCode.toCanvas(document.getElementById('address-qr'), address, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
+        if (error) console.error(error);
+        console.log('Address QR code successfully generated!');
+        document.getElementById('address-qr').parentNode.style.display = "block"; 
+    });
+}
+
+document.getElementById('update-all-data').addEventListener('click', updateAllData);
+
+
+
 document.getElementById('generate').addEventListener('click', () => {
     let mnemonic = document.getElementById('mnemonic').value;
     let password = document.getElementById('password').value;
+
+    if (mnemonic === "" || password === "") {
+        alert("Mnemonic and password cannot be empty!");
+        return;
+    }
+
     let ciphertext = CryptoJS.AES.encrypt(mnemonic, password).toString();
 
     console.log('Ciphertext:', ciphertext);  // Log ciphertext to console
@@ -113,6 +149,11 @@ document.getElementById('update-balance').addEventListener('click', function () 
 document.getElementById('decrypt').addEventListener('click', () => {
     let ciphertext = document.getElementById('scanned-ciphertext').value; 
     let password = document.getElementById('password').value;
+
+    if (ciphertext === "" || password === "") {
+        alert("Scanned ciphertext and password cannot be empty!");
+        return;
+    }
     let bytes = CryptoJS.AES.decrypt(ciphertext, password);
     let originalText = bytes.toString(CryptoJS.enc.Utf8);
     document.getElementById('mnemonic').value = originalText;
@@ -137,10 +178,8 @@ document.getElementById('decrypt').addEventListener('click', () => {
 });
 
 
-document.getElementById('update-all').addEventListener('click', function () {
-    generateSeed();
-    updateAllData();
-});
+document.getElementById('update-all').addEventListener('click', updateAllData);
+
 
 
 
