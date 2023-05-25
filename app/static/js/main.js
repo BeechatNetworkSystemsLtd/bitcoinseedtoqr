@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         let seed = bip39.mnemonicToSeedSync(mnemonic);
         let root = bitcoin.bip32.fromSeed(seed);
-        let path = "m/44'/0'/0'";
+        let path = "m/84'/0'/0'";
         let keyPair = root.derivePath(path);
         let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
 
