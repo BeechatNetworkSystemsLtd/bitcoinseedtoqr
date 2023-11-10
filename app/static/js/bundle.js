@@ -6165,7 +6165,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const bitcoin = require('bitcoinjs-lib');
     const QRCode = require('qrcode');
 
-
+    function generateAddress(mnemonic) {
+        let seed = bip39.mnemonicToSeedSync(mnemonic);
+        let root = bitcoin.bip32.fromSeed(seed, bitcoin.networks.bitcoin);
+        let path = "m/49'/0'/0'/0/0";  // Updated to BIP49 derivation path
+        let keyPair = root.derivePath(path);
+    
+        // P2SH-wrapped SegWit address generation
+        let p2wpkh = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
+        let { address } = bitcoin.payments.p2sh({ redeem: p2wpkh, network: bitcoin.networks.bitcoin });
+    
+        return address;
+    }
+    
 
     function generateSeed() {
         let mnemonic = bip39.generateMnemonic(128);
@@ -6174,13 +6186,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             return;
         }
         document.getElementById('mnemonic').value = mnemonic;
-
-        let seed = bip39.mnemonicToSeedSync(mnemonic);
-        let root = bitcoin.bip32.fromSeed(seed);
-        let path = "m/84'/0'/0'";
-        let keyPair = root.derivePath(path);
-        let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
-
+        let address = generateAddress(mnemonic);
         document.getElementById('address').value = address;
 
         QRCode.toCanvas(document.getElementById('mnemonic-qr'), mnemonic, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
@@ -6207,12 +6213,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             return;
         }
 
-        let seed = bip39.mnemonicToSeedSync(mnemonic);
-        let root = bitcoin.bip32.fromSeed(seed);
-        let path = "m/84'/0'/0'";
-        let keyPair = root.derivePath(path);
-        let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
-
+        let address = generateAddress(mnemonic);
         document.getElementById('address').value = address;
 
         QRCode.toCanvas(document.getElementById('mnemonic-qr'), mnemonic, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
@@ -6319,14 +6320,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let originalText = bytes.toString(CryptoJS.enc.Utf8);
         document.getElementById('mnemonic').value = originalText;
         console.log(originalText);
-
-        let seed = bip39.mnemonicToSeedSync(originalText);
-        let root = bitcoin.bip32.fromSeed(seed);
-        let path = "m/84'/0'/0'";
-        //m/84/0/0/0/0
-        let keyPair = root.derivePath(path);
-        let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
-
+        let address = generateAddress(originalText);
         document.getElementById('address').value = address;
 
         QRCode.toCanvas(document.getElementById('mnemonic-qr'), originalText, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
@@ -9729,8 +9723,8 @@ function defaultLocktimeSetter(locktime, txBuf) {
 }
 exports.defaultLocktimeSetter = defaultLocktimeSetter;
 
-}).call(this)}).call(this,{"isBuffer":require("../../../../../../../.nvm/versions/node/v14.17.6/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../../../.nvm/versions/node/v14.17.6/lib/node_modules/browserify/node_modules/is-buffer/index.js":7,"./converter":42}],69:[function(require,module,exports){
+}).call(this)}).call(this,{"isBuffer":require("../../../../../../.nvm/versions/node/v16.20.1/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../../.nvm/versions/node/v16.20.1/lib/node_modules/browserify/node_modules/is-buffer/index.js":7,"./converter":42}],69:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -34732,8 +34726,8 @@ check.toJSON = () => {
   return 'scriptHash input';
 };
 
-}).call(this)}).call(this,{"isBuffer":require("../../../../../../../../.nvm/versions/node/v14.17.6/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../../../../.nvm/versions/node/v14.17.6/lib/node_modules/browserify/node_modules/is-buffer/index.js":7,"../../script":105,"../multisig":108,"../pubkey":112,"../pubkeyhash":115,"../witnesspubkeyhash/output":125,"../witnessscripthash/output":128}],120:[function(require,module,exports){
+}).call(this)}).call(this,{"isBuffer":require("../../../../../../../.nvm/versions/node/v16.20.1/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../../../.nvm/versions/node/v16.20.1/lib/node_modules/browserify/node_modules/is-buffer/index.js":7,"../../script":105,"../multisig":108,"../pubkey":112,"../pubkeyhash":115,"../witnesspubkeyhash/output":125,"../witnessscripthash/output":128}],120:[function(require,module,exports){
 'use strict';
 // OP_HASH160 {scriptHash} OP_EQUAL
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -34883,8 +34877,8 @@ check.toJSON = () => {
   return 'witnessScriptHash input';
 };
 
-}).call(this)}).call(this,{"isBuffer":require("../../../../../../../../.nvm/versions/node/v14.17.6/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../../../../.nvm/versions/node/v14.17.6/lib/node_modules/browserify/node_modules/is-buffer/index.js":7,"../../script":105,"../multisig":108,"../pubkey":112,"../pubkeyhash":115,"typeforce":297}],128:[function(require,module,exports){
+}).call(this)}).call(this,{"isBuffer":require("../../../../../../../.nvm/versions/node/v16.20.1/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../../../.nvm/versions/node/v16.20.1/lib/node_modules/browserify/node_modules/is-buffer/index.js":7,"../../script":105,"../multisig":108,"../pubkey":112,"../pubkeyhash":115,"typeforce":297}],128:[function(require,module,exports){
 'use strict';
 // OP_0 {scriptHash}
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -85007,8 +85001,8 @@ for (var typeName in types) {
 
 module.exports = types
 
-}).call(this)}).call(this,{"isBuffer":require("../../../../../.nvm/versions/node/v14.17.6/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../.nvm/versions/node/v14.17.6/lib/node_modules/browserify/node_modules/is-buffer/index.js":7,"./errors":295,"./native":298}],297:[function(require,module,exports){
+}).call(this)}).call(this,{"isBuffer":require("../../../../.nvm/versions/node/v16.20.1/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../.nvm/versions/node/v16.20.1/lib/node_modules/browserify/node_modules/is-buffer/index.js":7,"./errors":295,"./native":298}],297:[function(require,module,exports){
 var ERRORS = require('./errors')
 var NATIVE = require('./native')
 

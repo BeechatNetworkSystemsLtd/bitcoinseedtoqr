@@ -7,7 +7,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const bitcoin = require('bitcoinjs-lib');
     const QRCode = require('qrcode');
 
-
+    function generateAddress(mnemonic) {
+        let seed = bip39.mnemonicToSeedSync(mnemonic);
+        let root = bitcoin.bip32.fromSeed(seed, bitcoin.networks.bitcoin);
+        let path = "m/49'/0'/0'/0/0";  // Updated to BIP49 derivation path
+        let keyPair = root.derivePath(path);
+    
+        // P2SH-wrapped SegWit address generation
+        let p2wpkh = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
+        let { address } = bitcoin.payments.p2sh({ redeem: p2wpkh, network: bitcoin.networks.bitcoin });
+    
+        return address;
+    }
+    
 
     function generateSeed() {
         let mnemonic = bip39.generateMnemonic(128);
@@ -16,13 +28,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             return;
         }
         document.getElementById('mnemonic').value = mnemonic;
-
-        let seed = bip39.mnemonicToSeedSync(mnemonic);
-        let root = bitcoin.bip32.fromSeed(seed);
-        let path = "m/84'/0'/0'";
-        let keyPair = root.derivePath(path);
-        let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
-
+        let address = generateAddress(mnemonic);
         document.getElementById('address').value = address;
 
         QRCode.toCanvas(document.getElementById('mnemonic-qr'), mnemonic, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
@@ -49,12 +55,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             return;
         }
 
-        let seed = bip39.mnemonicToSeedSync(mnemonic);
-        let root = bitcoin.bip32.fromSeed(seed);
-        let path = "m/84'/0'/0'";
-        let keyPair = root.derivePath(path);
-        let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
-
+        let address = generateAddress(mnemonic);
         document.getElementById('address').value = address;
 
         QRCode.toCanvas(document.getElementById('mnemonic-qr'), mnemonic, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
@@ -161,14 +162,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let originalText = bytes.toString(CryptoJS.enc.Utf8);
         document.getElementById('mnemonic').value = originalText;
         console.log(originalText);
-
-        let seed = bip39.mnemonicToSeedSync(originalText);
-        let root = bitcoin.bip32.fromSeed(seed);
-        let path = "m/84'/0'/0'";
-        //m/84/0/0/0/0
-        let keyPair = root.derivePath(path);
-        let { address } = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: bitcoin.networks.bitcoin });
-
+        let address = generateAddress(originalText);
         document.getElementById('address').value = address;
 
         QRCode.toCanvas(document.getElementById('mnemonic-qr'), originalText, { errorCorrectionLevel: 'H', scale: 6 }, function (error) {
